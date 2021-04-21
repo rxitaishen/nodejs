@@ -36,14 +36,16 @@ const server = http.createServer((req,res)=>{
     else if (req.url.slice(0,6)== "/input"){
         res.statusCode = 200;
         let url1 = req.url.split("?")
-        let urlquery = url1[1].split("&")
-        let firstQuery = urlquery[0].split("=")
-        let secondQuery = urlquery[1].split("=")
+        console.log(url1[1])
+        //let urlquery = url1[1].split("&")
+        //let firstQuery = urlquery[0].split("=")
+        //let secondQuery = urlquery[1].split("=")
         //let queryData = url1.parse(req.url,true).query
-        
+        let obQuery = querystring.parse(url1[1])
+        console.log(obQuery)
         res.setHeader('Content-Type', 'text/html')
-        res.write(firstQuery[1]+"<br>")
-        res.write(secondQuery[1]+"<br>")
+        res.write(obQuery.name123+"<br>")
+        res.write(obQuery.submit1+"<br>")
         res.end("submit success!")
     }
     else{
