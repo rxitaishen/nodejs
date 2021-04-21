@@ -1,5 +1,7 @@
 const http = require('http')
 const fs = require("fs")
+const url = require("url")
+const querystring=require('querystring')
 var i=0;
 const server = http.createServer((req,res)=>{
     if(req.url=="/favicon.ico"){
@@ -31,10 +33,18 @@ const server = http.createServer((req,res)=>{
             res.end()
         })
     }
-    else if (req.url = "/input"){
+    else if (req.url.slice(0,6)== "/input"){
         res.statusCode = 200;
-        res.setHeader('Content-Type', 'text/img')
-        res.end("提交成功！")
+        let url1 = req.url.split("?")
+        let urlquery = url1[1].split("&")
+        let firstQuery = urlquery[0].split("=")
+        let secondQuery = urlquery[1].split("=")
+        //let queryData = url1.parse(req.url,true).query
+        
+        res.setHeader('Content-Type', 'text/html')
+        res.write(firstQuery[1]+"<br>")
+        res.write(secondQuery[1]+"<br>")
+        res.end("submit success!")
     }
     else{
         res.statusCode = 200;
