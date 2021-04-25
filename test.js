@@ -34,29 +34,48 @@ const server = http.createServer((req,res)=>{
         })
     }
     else if (req.url.slice(0,6)== "/input"){
-        res.statusCode = 200;
         let url1 = req.url.split("?")
-        console.log(url1[1])
-        //let urlquery = url1[1].split("&")
-        //let firstQuery = urlquery[0].split("=")
-        //let secondQuery = urlquery[1].split("=")
-        //let queryData = url1.parse(req.url,true).query
+        //console.log(url1[1])
         let obQuery = querystring.parse(url1[1])
-        console.log(obQuery)
+        //console.log(obQuery)
+        if(obQuery.submit1=='Save'){
+            //2.创建并写入文件
+            fs.writeFile('./test.txt',obQuery.name1,(err)=>{
+                if(err){
+                    console.log(err)
+                    return
+                }
+                console.log('创建写入文件成功')
+            })
+        }
+        else if(obQuery.submit1=='AppendSave'){
+            fs.appendFile('./test.txt',obQuery.name1,(err)=>{
+                if(err){
+                    console.log(err)
+                    return
+                }
+                console.log('创建写入文件成功')
+            })
+        }
+        res.statusCode = 200
         res.setHeader('Content-Type', 'text/html')
-        res.write(obQuery.name123+"<br>")
-        res.write(obQuery.submit1+"<br>")
-        res.end("submit success!")
+        fs.readFile("testform.html",(err,fsData)=>{
+            if(err){
+                console.log("Read File Error")
+                throw err
+            }
+            res.write(fsData)
+            res.end()
+        })
+        //res.end("submit success!")
     }
     else{
         res.statusCode = 200;
         res.setHeader('Content-Type', 'text/html')
         //res.write(req.url)
+        i++
         res.write('<h1>This is Wu. You are the '+i+'th visitor</h1>')
         res.end();
     }
-    
-    i++;
-    console.log("req.url")
 });
 server.listen(3000);
