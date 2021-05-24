@@ -2,13 +2,51 @@ const http = require('http')
 const fs = require("fs")
 const url = require("url")
 const querystring=require('querystring')
-var i=0;
-const server = http.createServer((req,res)=>{
+const express =require('express')
+const insertDB = require('./MongodbLib')
+const app = express()
+//var i=0;
+//app.use(express.static(__dirname+"/public"))//哪个路径在前面就默认哪个是默认的index
+//app.use(express.static(__dirname+"/private"))
+app.use(express.static(__dirname+'/public'))
+var a =''
+var name=""
+var password=""
+var submit=''
+//doc = {}
+app.get('/input', (req, res,next) => {
+    name = req.query.name
+    password = req.query.password
+    submit = req.query.submit1
+    //doc[name] = password
+    //res.send('Hello World!')
+    a="This is a next() test."
+    //res.send('The first')
+    console.log(req.query.name)
+
+    if(name.length != 0 && password.length != 0)next()
+    else
+    res.send("用户名和密码都不能为空，请输入。")
+})
+app.get('/input', (req, res, next) =>{
+    if(submit = '注册'){
+        console.log(name)
+        insertDB.inserData("mydb","mycollection",[{name:name , password:password}])
+    }
+    //res.sendFile(__dirname +'/testnew.html')
+    res.send(a)
+})
+//app.get('/input', (req, res,next) => {
+ //   res.send(a)
+ // })
+
+app.listen(3000)
+/*const server = http.createServer((req,res)=>{
     if(req.url=="/favicon.ico"){
         res.statusCode = 200;
         res.setHeader('Content-Type', 'text/img')
-        //var fsData = fs.readFileSync("favico.ico") 同步的
-        fs.readFile("favico.ico",(err,fsData)=>{//异步的
+        //var fsData = fs.readFileSync("favicon.ico") 同步的
+        fs.readFile("favicon.ico",(err,fsData)=>{//异步的
             if(err){
                 console.log("Read File Error")
                 throw err
@@ -78,4 +116,4 @@ const server = http.createServer((req,res)=>{
         res.end();
     }
 });
-server.listen(3000);
+server.listen(3000);*/
